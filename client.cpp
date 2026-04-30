@@ -25,17 +25,19 @@ void receive(int sock) {
   }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
   int sock = socket(AF_INET, SOCK_STREAM, 0);
   if (sock == -1) {
     perror("socket");
     return 1;
   }
 
+  const char* serverIP = (argc > 1) ? argv[1] : "127.0.0.1";
+
   sockaddr_in addr{};
   addr.sin_family = AF_INET;
   addr.sin_port = htons(8080);
-  inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
+  inet_pton(AF_INET, serverIP, &addr.sin_addr);
 
   if (connect(sock, (sockaddr *)&addr, sizeof(addr)) == -1) {
     perror("connect");
